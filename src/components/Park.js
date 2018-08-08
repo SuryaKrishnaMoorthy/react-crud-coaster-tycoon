@@ -1,29 +1,11 @@
 import React from 'react'
-import ParkForm from './ParkForm'
-import ParkModel from '../models/Park'
 
 class Park extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      park: { rides: [] },
-      parksById: {},
-      showEdit: false
+      park: { rides: [] }
     }
-  }
-
-  componentDidMount = async () => {
-    const park = await ParkModel.find(this.props.parkId)
-    this.setState({ park })
-  }
-
-  destroyPark = async () => {
-    await ParkModel.destroy(this.state.park.id)
-    this.props.resetParks()
-  }
-
-  toggleEdit = () => {
-    this.setState({ showEdit: !this.state.showEdit })
   }
 
   render () {
@@ -38,6 +20,8 @@ class Park extends React.Component {
       </div>
     )
 
+    if (!park.name) return (<div className="alert alert-secondary">Select a Park</div>)
+
     return (
       <div className="card">
         <div className="card-header">
@@ -50,16 +34,7 @@ class Park extends React.Component {
           <ul>
             { lis }
           </ul>
-          {
-            this.state.showEdit ?
-            (
-              <div>
-                <hr/>
-                <ParkForm key={ park.id } park={ park } toggleEdit={ this.toggleEdit } resetParks={ this.props.resetParks } />
-              </div>
-            ) :
-            buttons
-          }
+          { buttons }
         </div>
       </div>
     )

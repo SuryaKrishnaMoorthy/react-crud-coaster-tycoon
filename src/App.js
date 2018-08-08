@@ -3,7 +3,6 @@ import ParksList from './components/ParksList'
 import ParkForm from './components/ParkForm'
 import Park from './components/Park'
 import ParkModel from './models/Park'
-window.BASE_URL = 'http://localhost:5000/api'
 
 class App extends Component {
   constructor () {
@@ -22,10 +21,9 @@ class App extends Component {
     this.setState({ selected: id })
   }
 
-  resetParks = async (id=null) => {
+  resetParks = async () => {
     const parks = await ParkModel.all()
-    this.setState({ parks, selected: null })
-    this.handleSelectPark(id)
+    this.setState({ parks })
   }
 
   render() {
@@ -45,19 +43,12 @@ class App extends Component {
                 selectPark={ this.handleSelectPark } />
             </div>
             <div className="col">
-              {
-                this.state.selected &&
-                <Park
-                  key={ this.state.selected }
-                  parkId={ this.state.selected }
-                  resetParks= { this.resetParks }
-                  />
-              }
+              <Park />
             </div>
             <div className="col-4">
               <h2>Create a New Park</h2>
               <hr/>
-              <ParkForm resetParks= { this.resetParks } />
+              <ParkForm resetParks={ this.resetParks } />
             </div>
           </div>
         </section>
