@@ -15,6 +15,11 @@ class Park extends React.Component {
     this.setState({ park })
   }
 
+  destroyPark = async () => {
+    await ParkModel.destroy(this.state.park.id)
+    this.props.resetParks()
+  }
+
   render () {
     const { park } = this.state
     const lis = park.rides.map(ride => {
@@ -34,7 +39,7 @@ class Park extends React.Component {
             { lis }
           </ul>
           <a className="btn btn-light d-block text-dark">Edit { park.name } Record</a>
-          <a className="btn btn-danger text-white d-block mt-2">Delete { park.name }</a>
+          <a onClick={ this.destroyPark } className="btn btn-danger text-white d-block mt-2">Delete { park.name }</a>
         </div>
       </div>
     )

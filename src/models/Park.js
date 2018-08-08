@@ -14,6 +14,13 @@ class Park {
 
     return park
   }
+
+  static destroy = async (id) => {
+    const response = await axios.delete(`${window.BASE_URL}/parks/${id}`)
+    const park = response.data.park
+
+    return park
+  }
 }
 
 export default Park

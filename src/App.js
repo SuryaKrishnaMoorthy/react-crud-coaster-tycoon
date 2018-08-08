@@ -14,13 +14,17 @@ class App extends Component {
     }
   }
 
-  componentDidMount = async () => {
-    const parks = await ParkModel.all()
-    this.setState({ parks })
+  componentDidMount () {
+    this.resetParks()
   }
 
   handleSelectPark = async (id) => {
     this.setState({ selected: id })
+  }
+
+  resetParks = async () => {
+    const parks = await ParkModel.all()
+    this.setState({ parks, selected: null })
   }
 
   render() {
@@ -40,7 +44,14 @@ class App extends Component {
                 selectPark={ this.handleSelectPark } />
             </div>
             <div className="col">
-              { this.state.selected && <Park key={ this.state.selected } parkId={ this.state.selected } /> }
+              {
+                this.state.selected &&
+                <Park
+                  key={ this.state.selected }
+                  parkId={ this.state.selected }
+                  resetParks= { this.resetParks }
+                  />
+              }
             </div>
             <div className="col-4">
               <h2>Create a New Park</h2>
