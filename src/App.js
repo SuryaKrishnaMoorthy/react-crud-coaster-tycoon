@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ParksList from './components/ParksList'
 import NewParkForm from './components/NewParkForm'
 import Park from './components/Park'
-import axios from 'axios'
+import ParkModel from './models/Park'
 window.BASE_URL = 'http://localhost:5000/api'
 
 class App extends Component {
@@ -15,21 +15,13 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await axios.get(`${window.BASE_URL}/parks`)
-    const parks = response.data.parks
-
-    this.setState({
-      parks
-    })
+    const parks = await ParkModel.all()
+    this.setState({ parks })
   }
 
-  handleSelectPark = async id => {
-    const park = this.state.parks.find(park => park.id === id)
-    if (park) {
-      const response = await axios.get(`${window.BASE_URL}/parks/${id}`)
-      const park = response.data.park
-      this.setState({ selected: { ...park, rides: park.rides }})
-    }
+  handleSelectPark = async (id) => {
+    const park = await ParkModel.find(id)
+    this.setState({ selected: park })
   }
 
   render() {
