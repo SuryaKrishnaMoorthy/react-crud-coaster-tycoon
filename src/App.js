@@ -10,7 +10,7 @@ class App extends Component {
     super()
     this.state = {
       parks: [],
-      selected: {}
+      selected: null
     }
   }
 
@@ -20,8 +20,7 @@ class App extends Component {
   }
 
   handleSelectPark = async (id) => {
-    const park = await ParkModel.find(id)
-    this.setState({ selected: park })
+    this.setState({ selected: id })
   }
 
   render() {
@@ -41,7 +40,7 @@ class App extends Component {
                 selectPark={ this.handleSelectPark } />
             </div>
             <div className="col">
-              { this.state.selected.id && <Park park={{ ...this.state.selected }} /> }
+              { this.state.selected && <Park key={ this.state.selected } parkId={ this.state.selected } /> }
             </div>
             <div className="col-4">
               <NewParkForm />
