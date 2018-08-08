@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import ParkModel from '../models/Park'
 
-class NewParkForm extends Component {
+class ParkForm extends Component {
   constructor (props) {
     super(props)
+    const { park={} } = this.props
+    const { name='', city='', state='', id=null } = park
     this.state = {
-      name: '',
-      city: '',
-      state: '',
+      id,
+      name,
+      city,
+      state,
       errors: []
     }
   }
@@ -21,28 +24,28 @@ class NewParkForm extends Component {
   onSubmit = async (event) => {
     event.preventDefault()
 
-    const { name, city, state } = this.state
-    const park = await ParkModel.create({ name, city, state })
+    const { name, city, state, id } = this.state
+    const park = id ?
+      await ParkModel.update(id, { name, city, state }) :
+      await ParkModel.create({ name, city, state })
 
-    if (park.errors) {
-      this.setState({ errors: park.errors })
-    } else {
-      this.setState({
-        name: '',
-        city: '',
-        state: '',
-        errors: []
-      })
+    if (park.errors) return this.setState({ errors: park.errors })
 
-      this.props.resetParks(park.id)
-    }
+    const newState = id ? park : { name: '', city: '', state: '' }
+    this.setState({ ...newState, errors: [] })
+
+    this.props.resetParks(park.id)
   }
 
   render () {
     const errors = this.state.errors.map((error, index) => {
       return <p key={ index } className="m-1">{ error }</p>
     })
-    
+
+    const cancel = this.state.id && (
+      <a onClick={ this.props.toggleEdit } className="btn btn-light mt-4 ml-4">Cancel</a>
+    )
+
     return (
       <form onSubmit={ this.onSubmit }>
         <div className="form-group">
@@ -59,7 +62,8 @@ class NewParkForm extends Component {
           </label>
           <input onChange={ this.onChange } value={ this.state.state } type="text" className="form-control" name="state" id="state" />
 
-          <button type="submit" className="btn btn-primary mt-4">Create New Park</button>
+          <button type="submit" className="btn btn-primary mt-4">Submit</button>
+          { cancel }
         </div>
         { !!errors.length && <div className="alert alert-danger">{ errors }</div> }
       </form>
@@ -67,4 +71,4 @@ class NewParkForm extends Component {
   }
 }
 
-export default NewParkForm
+export default ParkForm

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ParksList from './components/ParksList'
-import NewParkForm from './components/NewParkForm'
+import ParkForm from './components/ParkForm'
 import Park from './components/Park'
 import ParkModel from './models/Park'
 window.BASE_URL = 'http://localhost:5000/api'
@@ -24,7 +24,8 @@ class App extends Component {
 
   resetParks = async (id=null) => {
     const parks = await ParkModel.all()
-    this.setState({ parks, selected: id })
+    this.setState({ parks, selected: null })
+    this.handleSelectPark(id)
   }
 
   render() {
@@ -56,7 +57,7 @@ class App extends Component {
             <div className="col-4">
               <h2>Create a New Park</h2>
               <hr/>
-              <NewParkForm resetParks= { this.resetParks } />
+              <ParkForm resetParks= { this.resetParks } />
             </div>
           </div>
         </section>

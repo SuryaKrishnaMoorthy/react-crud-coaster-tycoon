@@ -1,4 +1,5 @@
 import React from 'react'
+import ParkForm from './ParkForm'
 import ParkModel from '../models/Park'
 
 class Park extends React.Component {
@@ -6,7 +7,8 @@ class Park extends React.Component {
     super(props)
     this.state = {
       park: { rides: [] },
-      parksById: {}
+      parksById: {},
+      showEdit: false
     }
   }
 
@@ -20,11 +22,21 @@ class Park extends React.Component {
     this.props.resetParks()
   }
 
+  toggleEdit = () => {
+    this.setState({ showEdit: !this.state.showEdit })
+  }
+
   render () {
     const { park } = this.state
     const lis = park.rides.map(ride => {
       return <li key={ ride.id }>{ ride.name } ({ ride.capacity } Capacity)</li>
     })
+    const buttons = (
+      <div>
+        <a onClick={ this.toggleEdit } className="btn btn-light d-block text-dark">Edit { park.name } Record</a>
+        <a onClick={ this.destroyPark } className="btn btn-danger text-white d-block mt-2">Delete { park.name }</a>
+      </div>
+    )
 
     return (
       <div className="card">
@@ -38,8 +50,16 @@ class Park extends React.Component {
           <ul>
             { lis }
           </ul>
-          <a className="btn btn-light d-block text-dark">Edit { park.name } Record</a>
-          <a onClick={ this.destroyPark } className="btn btn-danger text-white d-block mt-2">Delete { park.name }</a>
+          {
+            this.state.showEdit ?
+            (
+              <div>
+                <hr/>
+                <ParkForm key={ park.id } park={ park } toggleEdit={ this.toggleEdit } resetParks={ this.props.resetParks } />
+              </div>
+            ) :
+            buttons
+          }
         </div>
       </div>
     )
