@@ -17,7 +17,7 @@ class App extends Component {
     this.resetParks()
   }
 
-  handleSelectPark = async (id) => {
+  handleSelectPark = (id) => {
     this.setState({ selected: id })
   }
 
