@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ParkModel from '../models/Park'
 
 class NewParkForm extends Component {
   constructor (props) {
@@ -6,7 +7,8 @@ class NewParkForm extends Component {
     this.state = {
       name: '',
       city: '',
-      state: ''
+      state: '',
+      errors: []
     }
   }
 
@@ -16,9 +18,33 @@ class NewParkForm extends Component {
     })
   }
 
+  onSubmit = async (event) => {
+    event.preventDefault()
+
+    const { name, city, state } = this.state
+    const park = await ParkModel.create({ name, city, state })
+
+    if (park.errors) {
+      this.setState({ errors: park.errors })
+    } else {
+      this.setState({
+        name: '',
+        city: '',
+        state: '',
+        errors: []
+      })
+
+      this.props.resetParks(park.id)
+    }
+  }
+
   render () {
+    const errors = this.state.errors.map((error, index) => {
+      return <p key={ index } className="m-1">{ error }</p>
+    })
+    
     return (
-      <form>
+      <form onSubmit={ this.onSubmit }>
         <div className="form-group">
           <label htmlFor="name">
             Park Name
@@ -35,6 +61,7 @@ class NewParkForm extends Component {
 
           <button type="submit" className="btn btn-primary mt-4">Create New Park</button>
         </div>
+        { !!errors.length && <div className="alert alert-danger">{ errors }</div> }
       </form>
     )
   }

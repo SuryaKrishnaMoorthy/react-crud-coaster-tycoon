@@ -22,9 +22,9 @@ class App extends Component {
     this.setState({ selected: id })
   }
 
-  resetParks = async () => {
+  resetParks = async (id=null) => {
     const parks = await ParkModel.all()
-    this.setState({ parks, selected: null })
+    this.setState({ parks, selected: id })
   }
 
   render() {
@@ -56,7 +56,7 @@ class App extends Component {
             <div className="col-4">
               <h2>Create a New Park</h2>
               <hr/>
-              <NewParkForm />
+              <NewParkForm resetParks= { this.resetParks } />
             </div>
           </div>
         </section>
