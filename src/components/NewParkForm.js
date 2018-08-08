@@ -19,8 +19,6 @@ class NewParkForm extends Component {
   render () {
     return (
       <form>
-        <h2>Create a New Park</h2>
-        <hr/>
         <div className="form-group">
           <label htmlFor="name">
             Park Name

@@ -43,6 +43,8 @@ class App extends Component {
               { this.state.selected && <Park key={ this.state.selected } parkId={ this.state.selected } /> }
             </div>
             <div className="col-4">
+              <h2>Create a New Park</h2>
+              <hr/>
               <NewParkForm />
             </div>
           </div>
