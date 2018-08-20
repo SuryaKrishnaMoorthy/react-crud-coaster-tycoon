@@ -2,6 +2,7 @@ import axios from 'axios'
 const BASE_URL = 'http://localhost:5000/api'
 
 class Park {
+
   static all = async () => {
     const response = await axios.get(`${BASE_URL}/parks`)
     const parks = response.data.parks
@@ -19,8 +20,8 @@ class Park {
   static _validate (name, city, state) {
     const errors = []
 
-    if (name.length < 5) errors.push(`Name must be at least 6 characters`)
-    if (city.length < 5) errors.push(`Name must be at least 6 characters`)
+    if (name.length < 5) errors.push(`Park Name must be at least 6 characters`)
+    if (city.length < 5) errors.push(`City Name must be at least 6 characters`)
     if (!state) errors.push(`State is required`)
 
     return errors

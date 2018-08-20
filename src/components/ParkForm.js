@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ParkModel from '../models/Park'
 
 class ParkForm extends Component {
   constructor (props) {
@@ -18,9 +19,24 @@ class ParkForm extends Component {
     })
   }
 
-  onSubmit = event => {
+  onSubmit = async (event) => {
     event.preventDefault()
-    console.log('Submitting form...')
+    const {name, city, state} = this.state;
+    const park = await ParkModel.create({name, city, state});
+    
+    if(park.errors) {
+    return this.setState({
+        errors: park.errors
+      })
+    }
+
+    this.props.resetParks()
+
+    this.setState({
+      name: '',
+      city: '',
+      state: '',
+    })
   }
 
   render () {

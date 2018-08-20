@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ParksList from './components/ParksList'
 import ParkForm from './components/ParkForm'
 import Park from './components/Park'
+import ParkEdit from './components/ParkEdit.js'
 import ParkModel from './models/Park'
 
 class App extends Component {
@@ -9,7 +10,8 @@ class App extends Component {
     super()
     this.state = {
       parks: [],
-      selected: null
+      selected: null,
+      hideEdit: true
     }
   }
 
@@ -24,6 +26,12 @@ class App extends Component {
   resetParks = async () => {
     const parks = await ParkModel.all()
     this.setState({ parks })
+  }
+
+  toggeleEdit = () => {
+    this.setState({
+      hideEdit: !this.state.hideEdit
+    })
   }
 
   render() {
@@ -42,13 +50,29 @@ class App extends Component {
                 selected={ this.state.selected }
                 selectPark={ this.handleSelectPark } />
             </div>
+
             <div className="col">
-              <Park />
+            { this.state.hideEdit &&
+              <Park
+                resetParks={ this.resetParks }
+                key={this.state.selected}
+                toggeleEdit={this.toggeleEdit}
+                parkId={ this.state.selected } />
+            }
+
+            { !this.state.hideEdit &&
+              <ParkEdit
+                resetParks={ this.resetParks }
+                key={this.state.selected}
+                toggeleEdit={this.toggeleEdit}
+                parkId={ this.state.selected } />}
             </div>
+
             <div className="col-4">
               <h2>Create a New Park</h2>
               <hr/>
-              <ParkForm resetParks={ this.resetParks } />
+              <ParkForm
+                resetParks={ this.resetParks } />
             </div>
           </div>
         </section>

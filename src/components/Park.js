@@ -1,11 +1,29 @@
 import React from 'react'
+import ParkModel from '../models/Park.js'
+import ParkEdit from './ParkEdit.js'
 
 class Park extends React.Component {
+
   constructor (props) {
     super(props)
     this.state = {
-      park: { rides: [] }
+      park: { rides: [] },
     }
+  }
+
+  componentDidMount = async () => {
+    const park = await ParkModel.find(this.props.parkId);
+    this.setState({
+      park
+    })
+  }
+
+  destroyPark = async () => {
+    const park = await ParkModel.destroy(this.props.parkId);
+    const parks = await this.props.resetParks()
+    this.setState({
+      park: { rides: [] }
+    })
   }
 
   render () {
@@ -15,7 +33,7 @@ class Park extends React.Component {
     })
     const buttons = (
       <div>
-        <a onClick={ this.toggleEdit } className="btn btn-light d-block text-dark">Edit { park.name } Record</a>
+        <a onClick={ this.props.toggeleEdit } className="btn btn-light d-block text-dark">Edit { park.name } Record</a>
         <a onClick={ this.destroyPark } className="btn btn-danger text-white d-block mt-2">Delete { park.name }</a>
       </div>
     )
@@ -39,6 +57,19 @@ class Park extends React.Component {
       </div>
     )
   }
+
+  // componentWillRecieveProps = (newState) =>{
+  //   console.log(newState);
+  // }
+
+  // getRides = async (id) => {
+  //   const park = await ParkModel.find(id);
+  //   console.log(ride);
+  //   this.setState({
+  //     park
+  //   })
+  // }
+
 }
 
 export default Park
